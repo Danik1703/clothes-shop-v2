@@ -1,0 +1,189 @@
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<header>
+  <div class="logo">
+    <a href="#">
+      <img src="assets/foto/logo3.png" alt="Logo">
+    </a>
+  </div>
+  <nav>
+    <ul>
+      <li><a href="#home">Home</a></li>
+      <li><a href="#Shop">Shop</a></li>
+      <li><a routerLink="/jackets" target="_blank">Jackets</a></li>
+      <li><a href="#contact">Contact-Us</a></li>
+    </ul>
+    <div class="cart-icon" (click)="toggleCart()">
+      <img src="assets/foto/korsina.png" alt="Cart Icon">
+    </div>
+  </nav>
+</header>
+
+
+<div id="cart-modal" class="modal" [ngClass]="{'show': isCartOpen}">
+  <div class="modal-content">
+    <span class="close" (click)="closeCart()">&times;</span>
+    <h2>Ваша Корзина</h2>
+    <ul class="cart">
+      <li *ngIf="cartItems.length === 0">
+        Ваша Корзина пуста.
+      </li>
+      <li *ngFor="let item of cartItems" class="cart-item">
+        <img [src]="item.image" [alt]="item.name">
+        <div class="item-details">
+          <h4>{{ item.name }}</h4>
+          <p>Количество: {{ item.quantity }}</p>
+          <p>Цена: ${{ calculateItemTotal(item).toFixed(2) }}</p>
+        </div>
+        <button class="remove-btn" (click)="removeFromCart($event, item.name)">Удалить Товар</button>
+      </li>
+    </ul>
+    <div class="total-price">
+      <p>Общая стоимость товаров: ${{ totalItemsPrice.toFixed(2) }}</p>
+    </div>
+    <div class="cart-actions">
+      <button class="clear-cart-btn" (click)="clearCart()">Очистить Корзину</button>
+      <button class="checkout-btn" (click)="checkout()">Оплатить</button>
+    </div>
+    <div *ngIf="checkoutFormVisible && cartItems.length > 0" class="checkout-form">
+      <h3>Заполните информацию для оплаты</h3>
+      <form>
+        <label for="name">Имя:</label>
+        <input type="text" id="name" name="name" required>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+        <label for="address">Адрес:</label>
+        <textarea id="address" name="address" rows="4" required></textarea>
+        <button type="submit">Подтвердить</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<section class="banner">
+  <div id="slider">
+    <div class="slide" [class.active]="slideIndex === 1">
+      <img [src]="getAsset('/foto/glavnoe-bg.jpg')" alt="Slide 1">
+    </div>
+    <div class="slide" [class.active]="slideIndex === 2">
+      <img [src]="getAsset('/foto/galary.jpg')" alt="Slide 3">
+    </div>
+    <div class="slide" [class.active]="slideIndex === 3">
+      <img [src]="getAsset('/foto/galary-bg2.jpg')" alt="Slide 2">
+    </div>
+    <div class="slide" [class.active]="slideIndex === 4">
+      <img [src]="getAsset('/foto/galary-bg3.jpg')" alt="Slide 4">
+    </div>
+    <div class="slide" [class.active]="slideIndex === 5">
+      <img [src]="getAsset('/foto/galary-bg4.jpg')" alt="Slide 5">
+    </div>
+    <div class="slide" [class.active]="slideIndex === 6">
+      <img [src]="getAsset('/foto/bg6.jpg')" alt="Slide 6">
+    </div>
+    <div class="slide" [class.active]="slideIndex === 7">
+      <img [src]="getAsset('/foto/bg7.jpg')" alt="Slide 7">
+    </div>
+    <div class="dots">
+      <span class="dot" [class.active]="slideIndex === 1" (click)="currentSlide($event, 1)"></span>
+      <span class="dot" [class.active]="slideIndex === 2" (click)="currentSlide($event, 2)"></span>
+      <span class="dot" [class.active]="slideIndex === 3" (click)="currentSlide($event, 3)"></span>
+      <span class="dot" [class.active]="slideIndex === 4" (click)="currentSlide($event, 4)"></span>
+      <span class="dot" [class.active]="slideIndex === 5" (click)="currentSlide($event, 5)"></span>
+      <span class="dot" [class.active]="slideIndex === 6" (click)="currentSlide($event, 6)"></span>
+      <span class="dot" [class.active]="slideIndex === 7" (click)="currentSlide($event, 7)"></span>
+    </div>
+  </div>
+</section>
+
+<section id="products">
+  <h2>Популярні товари</h2>
+  <div class="product-grid">
+    <div class="top-row">
+      <div class="product-container">
+        <img src="assets/foto/photo1.jpg" alt="Футболка Premium">
+        <div class="product-info">
+          <span class="product-name">Футболка Premium</span>
+          <span class="product-price"><p>Ціна: $19.99</p></span>
+          <button class="add-to-cart-btn"
+                  (click)="addToCart($event, 'Футболка Premium', 19.99, 'assets/foto/photo1.jpg')">
+            Добавить в корзину
+          </button>
+        </div>
+      </div>
+      <div class="product-container">
+        <img src="assets/foto/photo2jpg.jpg" alt="Трикотажная футболка">
+        <div class="product-info">
+          <span class="product-name">Трикотажная футболка</span>
+          <span class="product-price"><p>Цена: $24.99</p></span>
+          <button class="add-to-cart-btn"
+                  (click)="addToCart($event, 'Трикотажная футболка', 24.99, 'assets/foto/photo2jpg.jpg')">
+            Добавить в корзину
+          </button>
+        </div>
+      </div>
+      <div class="product-container">
+        <img src="assets/foto/photo3.jpg" alt="Штаны-уоркер с карманами">
+        <div class="product-info">
+          <span class="product-name">Штаны-уоркер с карманами</span>
+          <span class="product-price"><p>Цена: $34.99</p></span>
+          <button class="add-to-cart-btn"
+                  (click)="addToCart($event, 'Штаны-уоркер с карманами', 34.99, 'assets/foto/photo3.jpg')">
+            Добавить в корзину
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="bottom-row">
+      <div class="product-container">
+        <img src="assets/foto/photo4.jpg" alt="Костюм">
+        <div class="product-info">
+          <span class="product-name">Костюм</span>
+          <span class="product-price"><p>Цена: $35.99</p></span>
+          <button class="add-to-cart-btn"
+                  (click)="addToCart($event, 'Костюм', 35.99, 'assets/foto/photo4.jpg')">
+            Добавить в корзину
+          </button>
+        </div>
+      </div>
+      <div class="product-container">
+        <img src="assets/foto/photo5.jpg" alt="Водо відштовхуючий Тренч">
+        <div class="product-info">
+          <span class="product-name">Водо відштовхуючий Тренч</span>
+          <span class="product-price"><p>Цена: $38.99</p></span>
+          <button class="add-to-cart-btn"
+                  (click)="addToCart($event, 'Водо відштовхуючий Тренч', 38.99, 'assets/foto/photo5.jpg')">
+            Добавить в корзину
+          </button>
+        </div>
+      </div>
+      <div class="product-container">
+        <img src="assets/foto/photo6.jpg" alt="Гаманець">
+        <div class="product-info">
+          <span class="product-name">Гаманець</span>
+          <span class="product-price"><p>Цена: $14.99</p></span>
+          <button class="add-to-cart-btn"
+                  (click)="addToCart($event, 'Гаманець', 14.99, 'assets/foto/photo6.jpg')">
+            Добавить в корзину
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+<div id="add-to-cart-success" class="modal" *ngIf="showAddToCartSuccess">
+  <div class="modal-content">
+    <h2>Товар успешно добавлен!</h2>
+  </div>
+</div>
+<div class="footer">
+  <p>© 2024 Ваше имя компании. Все права защищены.</p>
+  <div class="social-media-icons">
+    <a href="https://www.facebook.com/login/"><i class="fab fa-facebook"></i></a>
+    <a href="https://twitter.com/?lang=ru"><i class="fab fa-twitter"></i></a>
+    <a href="https://www.instagram.com"><i class="fab fa-instagram"></i></a>
+    <a href="https://www.youtube.com"><i class="fab fa-youtube"></i></a>
+  </div>
+</div>

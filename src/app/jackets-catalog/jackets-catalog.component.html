@@ -1,0 +1,172 @@
+<header>
+  <div class="logo">
+    <a href="#">
+      <img src="assets/foto/logo3.png" alt="Logo">
+    </a>
+  </div>
+<nav>
+  <ul>
+    <li><a href="#home">Home</a></li>
+    <li><a href="#Shop">Shop</a></li>
+    <li><a href="#contact">Contact-Us</a></li>
+  </ul>
+  <div class="cart-icon" (click)="toggleCart()">
+    <img src="assets/foto/korsina.png" alt="Cart Icon">
+  </div>
+</nav>
+</header>
+
+<div id="cart-modal" class="modal" [ngClass]="{'show': isCartOpen}">
+  <div class="modal-content">
+    <span class="close" (click)="closeCart()">&times;</span>
+    <h2>Ваша Корзина</h2>
+    <ul class="cart">
+      <li *ngIf="cartItems.length === 0">
+        Ваша Корзина пуста.
+      </li>
+      <li *ngFor="let item of cartItems" class="cart-item">
+        <img [src]="item.image" [alt]="item.name">
+        <div class="item-details">
+          <h4>{{ item.name }}</h4>
+          <p>Количество: {{ item.quantity }}</p>
+          <p>Цена: ${{ calculateItemTotal(item).toFixed(2) }}</p>
+        </div>
+        <button class="remove-btn" (click)="removeFromCart($event, item.name)">Удалить Товар</button>
+      </li>
+    </ul>
+    <div class="total-price">
+      <p>Общая стоимость товаров: ${{ totalItemsPrice.toFixed(2) }}</p>
+    </div>
+    <div class="cart-actions">
+      <button class="clear-cart-btn" (click)="clearCart()">Очистить Корзину</button>
+      <button class="checkout-btn" (click)="checkout()">Оплатить</button>
+    </div>
+    <div *ngIf="checkoutFormVisible && cartItems.length > 0" class="checkout-form">
+      <h3>Заполните информацию для оплаты</h3>
+      <form>
+        <label for="name">Имя:</label>
+        <input type="text" id="name" name="name" required>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+        <label for="address">Адрес:</label>
+        <textarea id="address" name="address" rows="4" required></textarea>
+        <button type="submit">Подтвердить</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<section class="banner">
+  <div id="slider">
+    <div class="slide" [ngClass]="{'active': slideIndex === 1}">
+      <img [src]="getAsset('/foto/glavnoe-bg.jpg')" alt="Slide 1">
+    </div>
+    <div class="slide" [ngClass]="{'active': slideIndex === 2}">
+      <img [src]="getAsset('/foto/galary.jpg')" alt="Slide 2">
+    </div>
+    <div class="slide" [ngClass]="{'active': slideIndex === 3}">
+      <img [src]="getAsset('/foto/galary-bg2.jpg')" alt="Slide 3">
+    </div>
+    <div class="slide" [ngClass]="{'active': slideIndex === 4}">
+      <img [src]="getAsset('/foto/galary-bg3.jpg')" alt="Slide 4">
+    </div>
+    <div class="slide" [ngClass]="{'active': slideIndex === 5}">
+      <img [src]="getAsset('/foto/galary-bg4.jpg')" alt="Slide 5">
+    </div>
+    <div class="slide" [ngClass]="{'active': slideIndex === 6}">
+      <img [src]="getAsset('/foto/bg6.jpg')" alt="Slide 6">
+    </div>
+    <div class="slide" [ngClass]="{'active': slideIndex === 7}">
+      <img [src]="getAsset('/foto/bg7.jpg')" alt="Slide 7">
+    </div>
+    <div class="dots">
+      <span class="dot" [ngClass]="{'active': slideIndex === 1}" (click)="currentSlide(1)"></span>
+      <span class="dot" [ngClass]="{'active': slideIndex === 2}" (click)="currentSlide(2)"></span>
+      <span class="dot" [ngClass]="{'active': slideIndex === 3}" (click)="currentSlide(3)"></span>
+      <span class="dot" [ngClass]="{'active': slideIndex === 4}" (click)="currentSlide(4)"></span>
+      <span class="dot" [ngClass]="{'active': slideIndex === 5}" (click)="currentSlide(5)"></span>
+      <span class="dot" [ngClass]="{'active': slideIndex === 6}" (click)="currentSlide(6)"></span>
+      <span class="dot" [ngClass]="{'active': slideIndex === 7}" (click)="currentSlide(7)"></span>
+    </div>
+  </div>
+</section>
+<div id="jackets-catalog">
+  <h1>Jackets</h1>
+  <div class="product-grid">
+    <div class="product-row">
+      <div class="product-container">
+        <img src="assets/foto/jackets1.jpg" alt="Серая Куртка">
+        <div class="product-info">
+          <span class="product-name">Серая Куртка</span>
+          <span class="product-price"><p>Цена: $14.99</p></span>
+          <button class="add-to-cart-btn" (click)="addToCart({ name: 'Серый Jacket', price: 14.99, image: 'assets/foto/jackets1.jpg', quantity: 1 })">
+            Добавить в корзину
+          </button>
+        </div>
+      </div>
+      <div class="product-container">
+        <img src="assets/foto/jackets3.jpg" alt="Бежевая Куртка">
+        <div class="product-info">
+          <span class="product-name">Бежевая Куртка</span>
+          <span class="product-price"><p>Цена: $25.99</p></span>
+          <button class="add-to-cart-btn" (click)="addToCart({ name: 'Бежевая Куртка', price: 25.99, image: 'assets/foto/jackets3.jpg', quantity: 1 })">
+            Добавить в корзину
+          </button>
+        </div>
+      </div>
+      <div class="product-container">
+        <img src="assets/foto/jackets4.jpg" alt="Синия Куртка">
+        <div class="product-info">
+          <span class="product-name">Синия Куртка</span>
+          <span class="product-price"><p>Цена: $10.99</p></span>
+          <button class="add-to-cart-btn" (click)="addToCart({ name: 'Синия Куртка', price: 10.99, image: 'assets/foto/jackets4.jpg', quantity: 1 })">
+            Добавить в корзину
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="product-row">
+      <div class="product-container">
+        <img src="assets/foto/jackets1.1.png" alt="Черная Куртка">
+        <div class="product-info">
+          <span class="product-name">Черная Куртка</span>
+          <span class="product-price"><p>Цена: $32.99</p></span>
+          <button class="add-to-cart-btn" (click)="addToCart({ name: 'Черная Куртка', price: 32.99, image: 'assets/foto/jackets1.1.png', quantity: 1 })">
+            Добавить в корзину
+          </button>
+        </div>
+      </div>
+      <div class="product-container">
+        <img src="assets/foto/jackets.1.2.png" alt="Зеленая Куртка">
+        <div class="product-info">
+          <span class="product-name">Зеленая Куртка</span>
+          <span class="product-price"><p>Цена: $30.99</p></span>
+          <button class="add-to-cart-btn" (click)="addToCart({ name: 'Зеленая Куртка', price: 30.99, image: 'assets/foto/jackets.1.2.png', quantity: 1 })">
+            Добавить в корзину
+          </button>
+        </div>
+      </div>
+      <div class="product-container">
+        <img src="assets/foto/jackets.1.3.png" alt="Темно-синия куртка">
+        <div class="product-info">
+          <span class="product-name">Темно-синия куртка</span>
+          <span class="product-price"><p>Цена: $35.99</p></span>
+          <button class="add-to-cart-btn" (click)="addToCart({ name: 'Темно-синия куртка', price: 35.99, image: 'assets/foto/jackets1.3.png', quantity: 1 })">
+            Добавить в корзину
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="social-media-icons">
+    <a href="#"><i class="fab fa-facebook-f"></i></a>
+    <a href="#"><i class="fab fa-twitter"></i></a>
+    <a href="#"><i class="fab fa-instagram"></i></a>
+  </div>
+  <div>
+    <p>© 2024 Your Company. All rights reserved.</p>
+  </div>
+</footer>
